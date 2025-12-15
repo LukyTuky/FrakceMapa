@@ -35,14 +35,33 @@ const map = L.map('map', {
   zoomControl: true
 }).setView([0, 0], 3);
 
-// Lokální tiles (GitHub Pages) – máš strukturu tiles/atlas a názvy 7-40_29.png
-L.tileLayer('./tiles/atlas/{z}-{x}_{y}.png', {
-  tileSize: 256,
-  minZoom: 0,
-  maxZoom: 7,
-  noWrap: true
-  // ,tms: true
-}).addTo(map);
+const TILE_SIZE = 256;
+const ROWS = 3; // 0..2
+const COLS = 2; // 0..1
+
+const MAP_WIDTH = COLS * TILE_SIZE;
+const MAP_HEIGHT = ROWS * TILE_SIZE;
+
+const bounds = [[0, 0], [MAP_HEIGHT, MAP_WIDTH]];
+
+for (let row = 0; row < ROWS; row++) {
+  for (let col = 0; col < COLS; col++) {
+    const img = `./tiles/atlas/minimap_${row}_${col}.png`;
+
+    // INVERT řádků (prohodí horní a spodní sekci)
+    const invRow = (ROWS - 1) - row;
+
+    const imageBounds = [
+      [invRow * TILE_SIZE, col * TILE_SIZE],
+      [(invRow + 1) * TILE_SIZE, (col + 1) * TILE_SIZE]
+    ];
+
+    L.imageOverlay(img, imageBounds, { interactive: false }).addTo(map);
+  }
+}
+
+map.setMaxBounds(bounds);
+map.fitBounds(bounds);
 
 // =========================
 // Helpers

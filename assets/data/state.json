@@ -1,0 +1,26 @@
+{
+  "factions": [
+    {
+      "id": "dffd4d85-031c-4e3c-9f55-eefa9c2e62f0",
+      "name": "Hlavní banka",
+      "category": "bary",
+      "url": "https://www.youtube.com/watch?v=XCMz95HOiw0",
+      "img": "",
+      "desc": "",
+      "markers": [
+        {
+          "id": "763b0f1d-d140-406b-9d34-1b287b3f14e9",
+          "x": 40.140625,
+          "y": -56.1796875,
+          "color": "#a855f7"
+        },
+        {
+          "id": "1fe09fc1-379d-401a-bb3f-e19f35af93ff",
+          "x": 37.9609375,
+          "y": -56.28125,
+          "color": "#55f767"
+        }
+      ]
+    }
+  ]
+}
