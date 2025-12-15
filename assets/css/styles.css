@@ -350,6 +350,49 @@ select.input { appearance: none; }
   cursor: pointer;
 }
 
+/* =========================
+   Pretty scrollbar (list)
+   ========================= */
+
+/* Firefox */
+.list {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168,87,229,0.65) rgba(255,255,255,0.06);
+}
+
+/* Chrome / Edge / Safari */
+.list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.list::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.05);
+  border-radius: 999px;
+  margin: 10px 0; /* ať není nalepený úplně nahoře/dole */
+}
+
+.list::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(168,87,229,0.85),
+    rgba(133,65,185,0.85)
+  );
+  border-radius: 999px;
+  border: 2px solid rgba(15, 23, 42, 0.55); /* optický spacing od tracku */
+}
+
+.list::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(168,87,229,1),
+    rgba(133,65,185,1)
+  );
+}
+
+.list::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 @media (max-width: 980px) {
   #app { grid-template-columns: 1fr; }
   #left { height: 48vh; }
