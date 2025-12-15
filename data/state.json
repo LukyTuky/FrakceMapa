@@ -527,6 +527,22 @@
           "color": "#c37da0"
         }
       ]
+    },
+    {
+      "id": "23987459-4e55-4010-b3ff-c687e282cb89",
+      "name": "Cluckin' Bell",
+      "category": "fastfoody",
+      "url": "https://www.youtube.com/watch?v=F6gueDli-j4",
+      "img": "",
+      "desc": "",
+      "markers": [
+        {
+          "id": "2b2cfd5d-6dcb-4f69-971d-0daa3a3d0fbc",
+          "x": 227.03125,
+          "y": 273.25,
+          "color": "#ffe696"
+        }
+      ]
     }
   ]
 }
