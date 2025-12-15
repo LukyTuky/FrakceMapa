@@ -3,11 +3,14 @@
 // =========================
 const ADMIN_TOKEN = '1234'; // <- změň si na svůj tajný klíč
 const DEFAULT_CATEGORIES = [
-  { id: 'all', name: 'Všeee' },
-  { id: 'state', name: 'Stát (LSPD/BCSO/FIB)' },
-  { id: 'ems', name: 'Záchranné složky (EMS/FD)' },
-  { id: 'legal', name: 'Legál (Firmy)' },
-  { id: 'illegal', name: 'Ilegál (Gangy/Mafie)' },
+  { id: 'all', name: 'Vše' },
+  { id: 'izs', name: 'IZS' },
+  { id: 'dilny', name: 'Dílny' },
+  { id: 'restaurace', name: 'Restaurace' },
+  { id: 'bary', name: 'Bary' },
+  { id: 'kluby', name: 'Kluby' },
+  { id: 'fastfoody', name: 'FastFoody' },
+  { id: 'kavarny', name: 'Kavárny' },
   { id: 'other', name: 'Ostatní' }
 ];
 
