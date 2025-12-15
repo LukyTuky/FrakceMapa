@@ -23,6 +23,7 @@ html, body {
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
+  overflow: hidden; /* <- důležité: zakáže scroll celé stránky */
 }
 a { color: inherit; }
 
@@ -37,6 +38,7 @@ a { color: inherit; }
   flex-direction: column;
   gap: 12px;
   backdrop-filter: blur(10px);
+  overflow: hidden; /* <- důležité */
 }
 
 .brand {
@@ -116,6 +118,7 @@ a { color: inherit; }
   gap: 10px;
   flex: 1;
   min-height: 0;
+  overscroll-behavior: contain;
 }
 
 .card {

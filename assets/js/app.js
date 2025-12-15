@@ -63,6 +63,24 @@ for (let row = 0; row < ROWS; row++) {
 map.setMaxBounds(bounds);
 map.fitBounds(bounds);
 
+function fixLeafletSize() {
+  requestAnimationFrame(() => map.invalidateSize({ animate: false }));
+}
+
+// když se změní velikost okna (přesun mezi monitory, změna rozlišení, dock/undock)
+window.addEventListener('resize', fixLeafletSize);
+
+// když se změní velikost gridu / panelů (např. breakpointy)
+const mapEl = document.getElementById('map');
+if (mapEl && 'ResizeObserver' in window) {
+  new ResizeObserver(fixLeafletSize).observe(mapEl);
+}
+
+// když se vrátíš do záložky / okna
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) setTimeout(fixLeafletSize, 50);
+});
+
 // =========================
 // Helpers
 // =========================
