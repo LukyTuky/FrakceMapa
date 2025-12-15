@@ -1,6 +1,7 @@
 // =========================
 // CONFIG
 // =========================
+const DATA_URL = './data/state.json';
 const ADMIN_TOKEN = '1234'; // <- změň si na svůj tajný klíč
 const DEFAULT_CATEGORIES = [
   { id: 'all', name: 'Vše' },
@@ -87,22 +88,39 @@ function normalizeFaction(f) {
   };
 }
 
-function loadState() {
-  // Jednorázově vyčisti stará data z dřívějška, aby nic nepřebíjelo změny v souborech.
-  // (i kdyby to někdo měl uložené z minulosti)
+async function loadState() {
+  // Zruš starý localStorage (historie), aby nic nikdy nepřebíjelo změny v souborech.
   try {
     localStorage.removeItem('fivem_factions_v4');
   } catch {}
 
-  // Vždy bereme pouze nastavení z JS souboru.
-  return { factions: [], categories: DEFAULT_CATEGORIES };
+  // Kategorie jsou vždy jen z JS
+  const categories = DEFAULT_CATEGORIES;
+
+  // Factions se načítají z data/state.json (jen factions)
+  try {
+    const res = await fetch(DATA_URL, { cache: 'no-store' });
+    if (!res.ok) throw new Error('fetch failed');
+
+    const parsed = await res.json();
+    const factionsRaw = Array.isArray(parsed.factions) ? parsed.factions : [];
+
+    return {
+      categories,
+      factions: factionsRaw.map(normalizeFaction)
+    };
+  } catch {
+    return { categories, factions: [] };
+  }
 }
 
 function saveState(state) {
-  // Záměrně nic – na této stránce se nic neukládá do prohlížeče.
+  // Záměrně nic – GitHub Pages je statické.
+  // Ukládání probíhá ručně: Export JSON -> vložit do data/state.json -> commit.
 }
 
-let state = loadState();
+// State (naplní se v initu)
+let state = { categories: DEFAULT_CATEGORIES, factions: [] };
 let activeCategory = 'all';
 let searchTerm = '';
 
@@ -615,17 +633,19 @@ const fileInput = document.getElementById('fileInput');
 if (isAdmin) {
   btnAdd.addEventListener('click', () => openModal({ mode: 'add', xy: null }));
 
+  // Exportuje se jen factions (kategorie jsou jen v JS)
   btnExport.addEventListener('click', async () => {
-    const out = JSON.stringify({ factions: state.factions, categories: state.categories }, null, 2);
+    const out = JSON.stringify({ factions: state.factions }, null, 2);
     try {
       await navigator.clipboard.writeText(out);
-      alert('Export JSON zkopírován do schránky ✅');
+      alert('Export JSON (factions) zkopírován do schránky ✅');
     } catch {
       const w = window.open();
       w.document.write('<pre>' + out.replaceAll('<', '&lt;') + '</pre>');
     }
   });
 
+  // Importuje se jen factions (kategorie jsou jen v JS)
   btnImport.addEventListener('click', () => fileInput.click());
 
   fileInput.addEventListener('change', async () => {
@@ -636,23 +656,16 @@ if (isAdmin) {
     const text = await file.text();
     try {
       const parsed = JSON.parse(text);
-
       const incomingFactions = Array.isArray(parsed.factions) ? parsed.factions : [];
-      const incomingCategories = Array.isArray(parsed.categories) ? parsed.categories : state.categories;
 
-      state = {
-        factions: incomingFactions.map(normalizeFaction),
-        categories: incomingCategories
-      };
+      state.factions = incomingFactions.map(normalizeFaction);
 
       saveState(state);
 
-      renderCategoryChips();
-      fillCategorySelect();
       renderList();
       renderAllMarkers();
 
-      alert('Import hotový ✅');
+      alert('Import (factions) hotový ✅');
     } catch {
       alert('Import selhal: JSON není validní.');
     }
@@ -710,8 +723,11 @@ document.getElementById('search').addEventListener('input', (e) => {
 // =========================
 // Init
 // =========================
-renderCategoryChips();
-fillCategorySelect();
-renderList();
-state.factions.forEach(renderFactionMarkers);
-refreshMarkersVisibility();
+(async () => {
+  state = await loadState();
+
+  renderCategoryChips();
+  fillCategorySelect();
+  renderList();
+  renderAllMarkers();
+})();
