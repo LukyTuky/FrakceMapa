@@ -1,7 +1,6 @@
 // =========================
 // CONFIG
 // =========================
-const STORAGE_KEY = 'fivem_factions_v4';
 const ADMIN_TOKEN = '1234'; // <- změň si na svůj tajný klíč
 const DEFAULT_CATEGORIES = [
   { id: 'all', name: 'Všeee' },
@@ -86,25 +85,18 @@ function normalizeFaction(f) {
 }
 
 function loadState() {
+  // Jednorázově vyčisti stará data z dřívějška, aby nic nepřebíjelo změny v souborech.
+  // (i kdyby to někdo měl uložené z minulosti)
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { factions: [], categories: DEFAULT_CATEGORIES };
+    localStorage.removeItem('fivem_factions_v4');
+  } catch {}
 
-    const parsed = JSON.parse(raw);
-    const factionsRaw = Array.isArray(parsed.factions) ? parsed.factions : [];
-    const categories = Array.isArray(parsed.categories) ? parsed.categories : DEFAULT_CATEGORIES;
-
-    return {
-      factions: factionsRaw.map(normalizeFaction),
-      categories
-    };
-  } catch {
-    return { factions: [], categories: DEFAULT_CATEGORIES };
-  }
+  // Vždy bereme pouze nastavení z JS souboru.
+  return { factions: [], categories: DEFAULT_CATEGORIES };
 }
 
 function saveState(state) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  // Záměrně nic – na této stránce se nic neukládá do prohlížeče.
 }
 
 let state = loadState();
