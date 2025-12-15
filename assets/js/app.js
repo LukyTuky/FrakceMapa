@@ -4,7 +4,7 @@
 const STORAGE_KEY = 'fivem_factions_v4';
 const ADMIN_TOKEN = '1234'; // <- změň si na svůj tajný klíč
 const DEFAULT_CATEGORIES = [
-  { id: 'all', name: 'Vše' },
+  { id: 'all', name: 'Všeee' },
   { id: 'state', name: 'Stát (LSPD/BCSO/FIB)' },
   { id: 'ems', name: 'Záchranné složky (EMS/FD)' },
   { id: 'legal', name: 'Legál (Firmy)' },
