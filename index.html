@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FiveM – mapa frakcí</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+</head>
+
+<body>
+  <div id="app">
+    <aside id="left">
+      <div class="brand">
+        <div>
+          <h1>Mapa frakcí – OTRP</h1>
+          <div style="font-size:12px;color:rgba(229,231,235,0.72);margin-top:2px;">
+            Klikni na marker pro detaily frakce.
+          </div>
+        </div>
+        <div id="modeBadge" class="badge">Public</div>
+      </div>
+
+      <div class="searchRow">
+        <input id="search" class="input" placeholder="Hledat frakci… (např. LSPD)" />
+      </div>
+
+      <div>
+        <div class="sectionTitle">Kategorie</div>
+        <div id="chips" class="chips"></div>
+      </div>
+
+      <div id="adminBar" class="adminBar">
+        <button id="btnAdd" class="btn primary">+ Přidat frakci</button>
+        <button id="btnExport" class="btn good">Export JSON</button>
+        <button id="btnImport" class="btn">Import JSON</button>
+        <button id="btnClear" class="btn danger">Smazat vše</button>
+        <div class="mutedNote">
+          Admin: v editoru zapni “+ Přidat marker” a pak klikej do mapy (klidně víckrát).
+        </div>
+      </div>
+
+      <div class="sectionTitle">Frakce</div>
+      <div id="list" class="list"></div>
+
+      <div class="mutedNote">
+        Tip: Admin režim zapneš přes <b>#admin=TVUJ_KLIC</b> v URL.
+      </div>
+    </aside>
+
+    <main id="mapWrap">
+      <div id="map"></div>
+      <div class="topRightHint">
+        <strong>O mapě</strong>
+        <span>
+          Veřejně: jen prohlížení. Admin: správa frakcí + více markerů na frakci.
+        </span>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL -->
+  <div id="modalBackdrop" class="modalBackdrop" aria-hidden="true">
+    <div id="modalEl" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modalHeader">
+        <h2 id="modalTitle">Frakce</h2>
+        <div class="headerRight">
+          <button id="btnMinimize" class="btn ghost" style="display:none;">Zmenšit</button>
+          <button id="btnCloseModal" class="btn ghost">Zavřít</button>
+        </div>
+      </div>
+
+      <div class="modalBody">
+        <div>
+          <div class="label">Název frakce</div>
+          <input id="fName" class="input" placeholder="např. LSPD" />
+        </div>
+
+        <div class="grid2">
+          <div>
+            <div class="label">Kategorie</div>
+            <select id="fCategory" class="input"></select>
+          </div>
+          <div>
+            <div class="label">Odkaz (žádost / discord / web)</div>
+            <input id="fUrl" class="input" placeholder="https://…" />
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div>
+            <div class="label">Obrázek (URL)</div>
+            <input id="fImg" class="input" placeholder="https://i.imgur.com/…" />
+          </div>
+          <div>
+            <div class="label">Popis (volitelné)</div>
+            <input id="fDesc" class="input" placeholder="Krátký popis frakce..." />
+          </div>
+        </div>
+
+        <div class="markerBox">
+          <div class="sectionTitle" style="margin:0 0 6px 2px;">Markery frakce</div>
+          <div class="mutedNote" style="margin-bottom:10px;">
+            Každá frakce může mít více markerů, každý s vlastní barvou.
+          </div>
+
+          <button id="btnAddMarker" class="btn primary">+ Přidat marker (klikni do mapy)</button>
+
+          <div id="markerList" style="margin-top:10px;"></div>
+        </div>
+
+        <div class="mutedNote" id="coordNote"></div>
+      </div>
+
+      <div class="modalFooter">
+        <button id="btnDelete" class="btn danger" style="display:none;">Smazat frakci</button>
+        <button id="btnCancel" class="btn">Zrušit</button>
+        <button id="btnSave" class="btn primary">Uložit</button>
+      </div>
+    </div>
+  </div>
+
+  <input id="fileInput" type="file" accept="application/json" style="display:none;" />
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="./assets/js/app.js"></script>
+</body>
+</html>
