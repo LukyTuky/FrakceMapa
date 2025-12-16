@@ -1,8 +1,5 @@
-// =========================
-// CONFIG
-// =========================
 const DATA_URL = './data/state.json';
-const ADMIN_TOKEN = '1234'; // <- změň si na svůj tajný klíč
+const ADMIN_TOKEN = '1234';
 const DEFAULT_CATEGORIES = [
   { id: 'all', name: 'Vše' },
   { id: 'izs', name: 'IZS' },
@@ -15,9 +12,6 @@ const DEFAULT_CATEGORIES = [
   { id: 'other', name: 'Ostatní' }
 ];
 
-// =========================
-// ADMIN MODE (URL hash)
-// =========================
 function getAdminFromHash() {
   const h = (location.hash || '').replace('#', '');
   const m = h.match(/admin=([^&]+)/i);
@@ -25,9 +19,6 @@ function getAdminFromHash() {
 }
 const isAdmin = getAdminFromHash() === ADMIN_TOKEN;
 
-// =========================
-// MAP
-// =========================
 const map = L.map('map', {
   crs: L.CRS.Simple,
   minZoom: 0,
@@ -36,8 +27,8 @@ const map = L.map('map', {
 }).setView([0, 0], 3);
 
 const TILE_SIZE = 256;
-const ROWS = 3; // 0..2
-const COLS = 2; // 0..1
+const ROWS = 3;
+const COLS = 2;
 
 const MAP_WIDTH = COLS * TILE_SIZE;
 const MAP_HEIGHT = ROWS * TILE_SIZE;
@@ -48,7 +39,6 @@ for (let row = 0; row < ROWS; row++) {
   for (let col = 0; col < COLS; col++) {
     const img = `./tiles/atlas/minimap_${row}_${col}.png`;
 
-    // INVERT řádků (prohodí horní a spodní sekci)
     const invRow = (ROWS - 1) - row;
 
     const imageBounds = [
@@ -67,23 +57,17 @@ function fixLeafletSize() {
   requestAnimationFrame(() => map.invalidateSize({ animate: false }));
 }
 
-// když se změní velikost okna (přesun mezi monitory, změna rozlišení, dock/undock)
 window.addEventListener('resize', fixLeafletSize);
 
-// když se změní velikost gridu / panelů (např. breakpointy)
 const mapEl = document.getElementById('map');
 if (mapEl && 'ResizeObserver' in window) {
   new ResizeObserver(fixLeafletSize).observe(mapEl);
 }
 
-// když se vrátíš do záložky / okna
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) setTimeout(fixLeafletSize, 50);
 });
 
-// =========================
-// Helpers
-// =========================
 function escapeHtml(s) {
   return String(s || '')
     .replaceAll('&', '&amp;')
@@ -93,9 +77,6 @@ function escapeHtml(s) {
     .replaceAll("'", '&#39;');
 }
 
-// =========================
-// DATA
-// =========================
 function normalizeFaction(f) {
   if (Array.isArray(f.markers)) return f;
 
@@ -126,15 +107,12 @@ function normalizeFaction(f) {
 }
 
 async function loadState() {
-  // Zruš starý localStorage (historie), aby nic nikdy nepřebíjelo změny v souborech.
   try {
     localStorage.removeItem('fivem_factions_v4');
   } catch {}
 
-  // Kategorie jsou vždy jen z JS
   const categories = DEFAULT_CATEGORIES;
 
-  // Factions se načítají z data/state.json (jen factions)
   try {
     const res = await fetch(DATA_URL, { cache: 'no-store' });
     if (!res.ok) throw new Error('fetch failed');
@@ -152,18 +130,12 @@ async function loadState() {
 }
 
 function saveState(state) {
-  // Záměrně nic – GitHub Pages je statické.
-  // Ukládání probíhá ručně: Export JSON -> vložit do data/state.json -> commit.
 }
 
-// State (naplní se v initu)
 let state = { categories: DEFAULT_CATEGORIES, factions: [] };
 let activeCategory = 'all';
 let searchTerm = '';
 
-// =========================
-// MARKERS
-// =========================
 const leafletMarkers = new Map();
 
 function markerIcon(color) {
@@ -261,9 +233,6 @@ function refreshMarkersVisibility() {
   });
 }
 
-// =========================
-// UI: Categories
-// =========================
 function renderCategoryChips() {
   const chips = document.getElementById('chips');
   chips.innerHTML = '';
@@ -293,9 +262,6 @@ function fillCategorySelect() {
   });
 }
 
-// =========================
-// UI: List
-// =========================
 function zoomToFaction(f) {
   const first = (f.markers || [])[0];
   if (!first) return;
@@ -383,9 +349,6 @@ function renderList() {
   }
 }
 
-// =========================
-// Modal / Editor
-// =========================
 const modalBackdrop = document.getElementById('modalBackdrop');
 const modalEl = document.getElementById('modalEl');
 
@@ -643,9 +606,6 @@ function openModalForEdit(id) {
   openModal({ mode: 'edit', faction: f });
 }
 
-// =========================
-// Admin UI visibility
-// =========================
 const modeBadge = document.getElementById('modeBadge');
 const adminBar = document.getElementById('adminBar');
 
@@ -658,9 +618,6 @@ if (isAdmin) {
   modeBadge.classList.remove('admin');
 }
 
-// =========================
-// Admin actions
-// =========================
 const btnAdd = document.getElementById('btnAdd');
 const btnExport = document.getElementById('btnExport');
 const btnImport = document.getElementById('btnImport');
@@ -670,7 +627,6 @@ const fileInput = document.getElementById('fileInput');
 if (isAdmin) {
   btnAdd.addEventListener('click', () => openModal({ mode: 'add', xy: null }));
 
-  // Exportuje se jen factions (kategorie jsou jen v JS)
   btnExport.addEventListener('click', async () => {
     const out = JSON.stringify({ factions: state.factions }, null, 2);
     try {
@@ -682,7 +638,6 @@ if (isAdmin) {
     }
   });
 
-  // Importuje se jen factions (kategorie jsou jen v JS)
   btnImport.addEventListener('click', () => fileInput.click());
 
   fileInput.addEventListener('change', async () => {
@@ -718,9 +673,6 @@ if (isAdmin) {
   });
 }
 
-// =========================
-// Map click (admin): přidávání markerů
-// =========================
 map.on('click', (e) => {
   if (!isAdmin) return;
 
@@ -748,18 +700,12 @@ map.on('click', (e) => {
   }
 });
 
-// =========================
-// Search
-// =========================
 document.getElementById('search').addEventListener('input', (e) => {
   searchTerm = (e.target.value || '').trim().toLowerCase();
   renderList();
   refreshMarkersVisibility();
 });
 
-// =========================
-// Init
-// =========================
 (async () => {
   state = await loadState();
 
