@@ -562,16 +562,16 @@
     },
     {
       "id": "9d04ec1a-90d6-48ef-a25b-3c5145cebe49",
-      "name": "Davis Pawn Shop",
+      "name": "Harrison’s Pawn Shop",
       "category": "other",
-      "url": "https://www.youtube.com/watch?v=YFqR1nPGxHc",
+      "url": "https://www.youtube.com/watch?v=oPMmFYPO3YA",
       "img": "",
       "desc": "",
       "markers": [
         {
-          "id": "6da031ed-d97f-4f83-8501-5b0bf5467041",
-          "x": 260.44792093526945,
-          "y": 206.41146046763473,
+          "id": "48e9edc6-acb0-40f5-aa1e-0138e8cf2dbc",
+          "x": 220.4375,
+          "y": 304.0625,
           "color": "#00ff00"
         }
       ]
@@ -605,6 +605,22 @@
           "x": 249.875,
           "y": 268.375,
           "color": "#0000ff"
+        }
+      ]
+    },
+    {
+      "id": "13c0d802-7f22-41ad-a09f-3fd21eb4f443",
+      "name": "Salieri’s Bar",
+      "category": "bary",
+      "url": "https://www.youtube.com/watch?v=RLwxw7L8GlU",
+      "img": "",
+      "desc": "",
+      "markers": [
+        {
+          "id": "6023f252-4bc0-47f8-b448-8c0498f53a69",
+          "x": 258.8125,
+          "y": 205.78125,
+          "color": "#c37da0"
         }
       ]
     }
